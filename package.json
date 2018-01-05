@@ -1,0 +1,95 @@
+{
+  "name": "bcash",
+  "version": "1.0.0-pre",
+  "description": "Bitcoin Cash bike-shed",
+  "license": "MIT",
+  "repository": "git://github.com/bcash-org/bcash.git",
+  "homepage": "https://github.com/bcash-org/bcash",
+  "bugs": {
+    "url": "https://github.com/bcash-org/bcash/issues"
+  },
+  "author": "Fedor Indutny <fedor@indutny.com>",
+  "contributors": [
+    "Christopher Jeffrey <chjjeffrey@gmail.com>"
+  ],
+  "keywords": [
+    "bcash",
+    "bitcoin cash",
+    "blockchain",
+    "cryptocurrency",
+    "wallet"
+  ],
+  "engines": {
+    "node": ">=7.6.0"
+  },
+  "dependencies": {
+    "bcfg": "~0.0.1",
+    "bclient": "~0.0.1",
+    "bcrypto": "~0.0.2",
+    "bdb": "~0.0.2",
+    "bdns": "~0.0.1",
+    "bevent": "~0.0.1",
+    "bfile": "~0.0.1",
+    "bfilter": "~0.0.1",
+    "binet": "~0.0.1",
+    "blgr": "~0.0.1",
+    "bmutex": "~0.0.1",
+    "bn.js": "~4.11.8",
+    "bsock": "~0.0.1",
+    "bsocks": "~0.0.1",
+    "bstring": "~0.0.1",
+    "btcp": "~0.0.1",
+    "bufio": "~0.0.1",
+    "bupnp": "~0.0.1",
+    "bval": "~0.0.1",
+    "bweb": "~0.0.1",
+    "n64": "~0.1.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "babelify": "^8.0.0",
+    "browserify": "^14.5.0",
+    "eslint": "^4.14.0",
+    "jsdoc": "^3.5.5",
+    "mocha": "^4.0.1",
+    "uglify-es": "^3.1.3",
+    "uglifyjs-webpack-plugin": "^1.1.5",
+    "webpack": "^3.10.0"
+  },
+  "main": "./lib/bcash.js",
+  "bin": {
+    "bcash": "./bin/bcash",
+    "bcash-node": "./bin/node",
+    "bcash-spvnode": "./bin/spvnode"
+  },
+  "scripts": {
+    "browserify": "browserify -s bcash lib/bcash-browser.js | uglifyjs -c > bcash.js",
+    "clean": "rm -f {browser/,}{bcash.js,bcash-worker.js,app.js,worker.js}",
+    "docs": "jsdoc -c jsdoc.json",
+    "lint": "eslint $(cat .eslintfiles) || exit 0",
+    "lint-file": "eslint",
+    "test": "mocha --reporter spec test/*.js",
+    "test-browser": "NODE_BACKEND=js mocha --reporter spec test/*.js",
+    "test-file": "mocha --reporter spec",
+    "test-file-browser": "NODE_BACKEND=js mocha --reporter spec",
+    "webpack": "webpack --config webpack.browser.js",
+    "webpack-browser": "webpack --config webpack.browser.js",
+    "webpack-compat": "webpack --config webpack.compat.js",
+    "webpack-app": "webpack --config webpack.app.js"
+  },
+  "browser": {
+    "./lib/hd/nfkd": "./lib/hd/nfkd-compat.js",
+    "./lib/hd/wordlist": "./lib/hd/wordlist-browser.js",
+    "./lib/workers/child": "./lib/workers/child-browser.js",
+    "./lib/workers/parent": "./lib/workers/parent-browser.js",
+    "./lib/bcash": "./lib/bcash-browser.js"
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  }
+}
