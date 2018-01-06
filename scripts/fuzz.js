@@ -2,7 +2,6 @@
 
 const Script = require('../lib/script/script');
 const Stack = require('../lib/script/stack');
-const Witness = require('../lib/script/witness');
 const Input = require('../lib/primitives/input');
 const Output = require('../lib/primitives/output');
 const Outpoint = require('../lib/primitives/outpoint');
@@ -106,23 +105,6 @@ function randomTX() {
   return tx;
 }
 
-function randomWitness(redeem) {
-  const size = rand(1, 100);
-  const witness = new Witness();
-
-  for (let i = 0; i < size; i++) {
-    const len = rand(0, 100);
-    witness.push(random.randomBytes(len));
-  }
-
-  if (redeem)
-    witness.push(redeem);
-
-  witness.compile();
-
-  return witness;
-}
-
 function randomInputScript(redeem) {
   const size = rand(1, 100);
   const script = new Script();
@@ -189,14 +171,6 @@ function randomScripthash() {
   return Script.fromScripthash(random.randomBytes(20));
 }
 
-function randomWitnessPubkeyhash() {
-  return Script.fromProgram(0, random.randomBytes(20));
-}
-
-function randomWitnessScripthash() {
-  return Script.fromProgram(0, random.randomBytes(32));
-}
-
 function randomProgram() {
   const version = rand(0, 16);
   const size = rand(2, 41);
@@ -211,8 +185,6 @@ function randomRedeem() {
       return randomPubkeyhash();
     case 2:
       return randomMultisig();
-    case 3:
-      return randomWitnessPubkeyhash();
     case 4:
       return randomProgram();
   }
@@ -260,36 +232,6 @@ function randomScripthashContext() {
   };
 }
 
-function randomWitnessPubkeyhashContext() {
-  return {
-    input: new Script(),
-    witness: randomWitness(),
-    output: randomWitnessPubkeyhash(),
-    redeem: null
-  };
-}
-
-function randomWitnessScripthashContext() {
-  const redeem = randomRedeem();
-  return {
-    input: new Script(),
-    witness: randomWitness(redeem.toRaw()),
-    output: Script.fromProgram(0, redeem.sha256()),
-    redeem: redeem
-  };
-}
-
-function randomWitnessNestedContext() {
-  const redeem = randomRedeem();
-  const program = Script.fromProgram(0, redeem.sha256());
-  return {
-    input: Script.fromItems([program.toRaw()]),
-    witness: randomWitness(redeem.toRaw()),
-    output: Script.fromScripthash(program.hash160()),
-    redeem: redeem
-  };
-}
-
 function randomContext() {
   switch (rand(0, 6)) {
     case 0:
@@ -298,12 +240,6 @@ function randomContext() {
       return randomPubkeyhashContext();
     case 2:
       return randomScripthashContext();
-    case 3:
-      return randomWitnessPubkeyhashContext();
-    case 4:
-      return randomWitnessScripthashContext();
-    case 5:
-      return randomWitnessNestedContext();
   }
   throw new Error();
 }
@@ -376,18 +312,14 @@ function fuzzVerify(flags) {
       tx = randomTX();
 
     const input = randomInputScript();
-    const witness = randomWitness();
     const output = randomOutputScript();
 
     tx.inputs[0].script = input;
-    tx.inputs[0].witness = witness;
-
     tx.refresh();
 
     try {
       Script.verify(
         input,
-        witness,
         output,
         tx,
         0,
@@ -412,9 +344,6 @@ function fuzzVerify(flags) {
     console.log('Input:');
     console.log(input);
 
-    console.log('Witness:');
-    console.log(witness);
-
     console.log('Output:');
     console.log(output);
 
@@ -437,14 +366,12 @@ function fuzzLess(flags) {
     const input = tx.inputs[0];
 
     input.script = ctx.input;
-    input.witness = ctx.witness;
 
     tx.refresh();
 
     try {
       Script.verify(
         ctx.input,
-        ctx.witness,
         ctx.output,
         tx,
         0,
@@ -465,9 +392,6 @@ function fuzzLess(flags) {
 
     console.log('Input:');
     console.log(ctx.input);
-
-    console.log('Witness:');
-    console.log(ctx.witness);
 
     console.log('Output:');
     console.log(ctx.output);
