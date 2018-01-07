@@ -2,6 +2,7 @@
 
 const bweb = require('bweb');
 const fs = require('bfile');
+const blgr = require('blgr');
 const WSProxy = require('./wsproxy');
 
 const index = fs.readFileSync(`${__dirname}/index.html`);
