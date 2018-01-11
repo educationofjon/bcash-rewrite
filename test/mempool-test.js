@@ -274,7 +274,7 @@ describe('Mempool', function() {
 
     const sig = tx.signature(0, prev, 70000, key.privateKey, ALL, 0);
     tx.inputs[0].script = Script.fromItems([sig]);
-    tx.inputs[0].witness.push(Buffer.alloc(0));
+    tx.inputs[0].push(Buffer.alloc(0));
 
     let err;
     try {
@@ -289,8 +289,6 @@ describe('Mempool', function() {
 
   it('should not cache a malleated wtx with wit removed', async () => {
     const key = KeyRing.generate();
-
-    key.witness = true;
 
     const tx = new MTX();
     tx.addOutput(wallet.getAddress(), 50000);
