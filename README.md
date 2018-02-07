@@ -6,7 +6,7 @@ details.
 
 ---
 
-**Bcash is an alternative implementation of the bitcoin-cash protocol, written in
+Bcash is an alternative implementation of the bitcoin-cash protocol, written in
 node.js.
 
 Bcash is well tested and aware of all known consensus rules.
