@@ -220,12 +220,12 @@ describe('HTTP', function() {
       maxtime: json.maxtime,
       expires: json.expires,
       sigoplimit: 20000,
-      sizelimit: 1000000,
+      sizelimit: 8000000,
       longpollid:
         '0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206'
         + '00000000',
       submitold: false,
-      coinbaseaux: { flags: '6d696e65642062792062636f696e' },
+      coinbaseaux: { flags: '6d696e6564206279206263617368' },
       coinbasevalue: 5000000000,
       transactions: []
     });
