@@ -47,10 +47,6 @@ const wallet = new MemWallet({
   network
 });
 
-const witWallet = new MemWallet({
-  network
-});
-
 let tip1 = null;
 let tip2 = null;
 
@@ -133,6 +129,10 @@ describe('Chain', function() {
 
   it('should mine competing chains', async () => {
     for (let i = 0; i < 10; i++) {
+
+      const tip1 = await chain.getEntry(hash1);
+      const tip2 = await chain.getEntry(hash2);
+
       const job1 = await cpu.createJob(tip1);
       const job2 = await cpu.createJob(tip2);
 
@@ -160,9 +160,6 @@ describe('Chain', function() {
 
       assert.strictEqual(chain.tip.hash, hash1);
 
-      tip1 = await chain.getEntry(hash1);
-      tip2 = await chain.getEntry(hash2);
-
       assert(tip1);
       assert(tip2);
 
@@ -181,7 +178,7 @@ describe('Chain', function() {
   });
 
   it('should handle a reorg', async () => {
-    assert.strictEqual(chain.height, 210);
+    assert.strictEqual(chain.height, 200);
 
     const entry = await chain.getEntry(tip2.hash);
     assert(entry);
@@ -401,11 +398,11 @@ describe('Chain', function() {
     assert(await chain.db.verifyDeployments());
   });
 
-  it('should have activated UAHF based on Block-Height', async () => {
+  it('should have activated UAHF', async () => {
     const height = network.block.UAHFHeight;
     const prev = await chain.getPrevious(chain.tip);
-    const state = await chain.getState(prev, height);
-    assert.strictEqual(state, 3);
+    const state = await chain.getState(prev);
+    assert(chain.state.hasUAHF());
   });
 
   it('should test csv', async () => {
@@ -599,8 +596,8 @@ describe('Chain', function() {
 
   it('should add addrs to miner', async () => {
     miner.addresses.length = 0;
-    miner.addAddress(witWallet.getReceive());
-    assert.strictEqual(witWallet.getReceive().getType(), 'pubkeyhash');
+    miner.addAddress(wallet.getReceive());
+    assert.strictEqual(wallet.getReceive().getType(), 'pubkeyhash');
   });
 
   it('should mine 2000 blocks', async () => {
@@ -619,9 +616,9 @@ describe('Chain', function() {
     const mtx = new MTX();
 
     mtx.addTX(cb, 0);
-    mtx.addOutput(witWallet.getAddress(), 1000);
+    mtx.addOutput(wallet.getAddress(), 1000);
 
-    witWallet.sign(mtx);
+    wallet.sign(mtx);
 
     const job = await cpu.createJob();
     job.addTX(mtx.toTX(), mtx.view);
@@ -645,9 +642,9 @@ describe('Chain', function() {
       mtx.addTX(cb, 0);
 
       for (let j = 0; j < 16; j++)
-        mtx.addOutput(witWallet.getAddress(), 1);
+        mtx.addOutput(wallet.getAddress(), 1);
 
-      witWallet.sign(mtx);
+      wallet.sign(mtx);
 
       job.pushTX(mtx.toTX());
     }
@@ -658,8 +655,8 @@ describe('Chain', function() {
   });
 
   it('should mine fail to connect too much size', async () => {
-    const start = chain.height - 2000;
-    const end = chain.height - 200;
+    const start = chain.height - 1000;
+    const end = chain.height - 100;
     const job = await cpu.createJob();
 
     for (let i = start; i <= end; i++) {
@@ -670,9 +667,9 @@ describe('Chain', function() {
       mtx.addTX(cb, 0);
 
       for (let j = 0; j < 20; j++)
-        mtx.addOutput(witWallet.getAddress(), 1);
+        mtx.addOutput(wallet.getAddress(), 1);
 
-      witWallet.sign(mtx);
+      wallet.sign(mtx);
 
       job.pushTX(mtx.toTX());
     }
@@ -695,9 +692,9 @@ describe('Chain', function() {
       mtx.addTX(cb, 0);
 
       for (let j = 0; j < 15; j++)
-        mtx.addOutput(witWallet.getAddress(), 1);
+        mtx.addOutput(wallet.getAddress(), 1);
 
-      witWallet.sign(mtx);
+      wallet.sign(mtx);
 
       job.pushTX(mtx.toTX());
     }
@@ -730,9 +727,9 @@ describe('Chain', function() {
     const mtx = new MTX();
 
     mtx.addTX(cb, 0);
-    mtx.addOutput(witWallet.getAddress(), 1);
+    mtx.addOutput(wallet.getAddress(), 1);
 
-    witWallet.sign(mtx);
+    wallet.sign(mtx);
 
     job.addTX(mtx.toTX(), mtx.view);
     job.refresh();
@@ -748,9 +745,9 @@ describe('Chain', function() {
     const mtx = new MTX();
 
     mtx.addTX(cb, 0);
-    mtx.addOutput(witWallet.getAddress(), 1e8);
+    mtx.addOutput(wallet.getAddress(), 1e8);
 
-    witWallet.sign(mtx);
+    wallet.sign(mtx);
 
     job.pushTX(mtx.toTX());
     job.refresh();
@@ -769,11 +766,11 @@ describe('Chain', function() {
 
     const value = Math.floor(consensus.MAX_MONEY / 2);
 
-    mtx.addOutput(witWallet.getAddress(), value);
-    mtx.addOutput(witWallet.getAddress(), value);
-    mtx.addOutput(witWallet.getAddress(), value);
+    mtx.addOutput(wallet.getAddress(), value);
+    mtx.addOutput(wallet.getAddress(), value);
+    mtx.addOutput(wallet.getAddress(), value);
 
-    witWallet.sign(mtx);
+    wallet.sign(mtx);
 
     job.pushTX(mtx.toTX());
     job.refresh();
@@ -819,7 +816,7 @@ describe('Chain', function() {
       assert(await chain.add(block, flags));
     }
 
-    assert.strictEqual(chain.height, 2749);
+    assert.strictEqual(chain.height, 2314);
   });
 
   it('should fail to connect too many sigops', async () => {
@@ -853,7 +850,7 @@ describe('Chain', function() {
         mtx.inputs[j - 2].script.fromItems([script.toRaw()]);
       }
 
-      mtx.addOutput(witWallet.getAddress(), 1);
+      mtx.addOutput(wallet.getAddress(), 1);
 
       job.pushTX(mtx.toTX());
     }
