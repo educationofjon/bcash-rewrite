@@ -1,12 +1,12 @@
 {
   "name": "bcash",
   "version": "1.0.0-pre",
-  "description": "Bitcoin Cash bike-shed",
+  "description": "Bitcoin-Cash bike-shed",
   "license": "MIT",
-  "repository": "git://github.com/bcash-org/bcash.git",
-  "homepage": "https://github.com/bcash-org/bcash",
+  "repository": "git://github.com/bcash-org/bcoin-abc.git",
+  "homepage": "https://github.com/bcash-org/bcoin-abc",
   "bugs": {
-    "url": "https://github.com/bcash-org/bcash/issues"
+    "url": "https://github.com/bcash-org/bcoin-abc/issues"
   },
   "author": "Fedor Indutny <fedor@indutny.com>",
   "contributors": [
@@ -69,7 +69,8 @@
   "bin": {
     "bcash": "./bin/bcash",
     "bcash-node": "./bin/node",
-    "bcash-spvnode": "./bin/spvnode"
+    "bcash-spvnode": "./bin/spvnode",
+    "bwallet": "./bin/bwallet"
   },
   "scripts": {
     "browserify": "browserify -s bcash lib/bcash-browser.js | uglifyjs -c > bcash.js",
