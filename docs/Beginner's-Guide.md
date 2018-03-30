@@ -1,11 +1,11 @@
 ## Introduction
 
-Bcoin is an _alternative_ implementation of the bitcoin protocol, written in node.js. It is a full node which can be used for full blockchain validation and is aware of all known consensus rules.
+Bcoin-abc is an _alternative_ implementation of the bitcoin-cash protocol, written in node.js. It is a full node which can be used for full blockchain validation and is aware of all known consensus rules.
 
 ## Requirements
 
 - Linux, OSX, or Windows (\*) (\*\*)
-- node.js >=v5.0.0
+- node.js >=v7.6.0
 - npm >=v4.0.0
 - python2 (for node-gyp)
 - gcc/g++ (for leveldb and secp256k1)
@@ -17,20 +17,20 @@ Bcoin is an _alternative_ implementation of the bitcoin protocol, written in nod
 
 ## Build & Install
 
-Bcoin is meant to be installed via npm, but for the security conscious, it may be better to clone from github. All tagged commits for release should be signed by @chjj's [PGP key][keybase] (`B4B1F62DBAC084E333F3A04A8962AB9DE6666BBD`). Signed copies of node.js are available from [nodejs.org][node], or from your respective OS's package repositories.
+Bcoin-abc is meant to be installed via npm, but for the security conscious, it may be better to clone from github. All tagged commits for release should be signed by @chjj's [PGP key][keybase] (`B4B1F62DBAC084E333F3A04A8962AB9DE6666BBD`). Signed copies of node.js are available from [nodejs.org][node], or from your respective OS's package repositories.
 
 ### Installing via NPM
 
 ``` bash
-$ npm install -g bcoin --production
+$ npm install -g bcoin-abc --production
 ```
 
 ### Installing via Git
 
 ``` bash
-$ curl https://keybase.io/chjj/pgp_keys.asc | gpg --import
-$ git clone git://github.com/bcoin-org/bcoin.git
-$ cd bcoin
+$ curl https://keybase.io/rojikku/pgp_keys.asc | gpg --import
+$ git clone git://github.com/bcash-org/bcoin-abc.git
+$ cd bcoin-abc
 $ git tag
 ...
 v1.0.0-alpha # latest version
