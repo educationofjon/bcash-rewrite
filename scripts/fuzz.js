@@ -38,7 +38,7 @@ function assertConsensus(tx, output, flags, code) {
 
   if (err !== code) {
     console.log('bitcoinconsensus mismatch!');
-    console.log(`${err} (bitcoin core) !== ${code} (bcoin)`);
+    console.log(`${err} (bitcoin-abc) !== ${code} (bcoin-abc)`);
     console.log(tx);
     console.log(output);
     console.log(flags);
@@ -171,6 +171,7 @@ function randomScripthash() {
   return Script.fromScripthash(random.randomBytes(20));
 }
 
+
 function randomProgram() {
   const version = rand(0, 16);
   const size = rand(2, 41);
@@ -185,7 +186,7 @@ function randomRedeem() {
       return randomPubkeyhash();
     case 2:
       return randomMultisig();
-    case 4:
+   case 4:
       return randomProgram();
   }
   throw new Error();
@@ -201,7 +202,7 @@ function randomScript() {
       return randomMultisig();
     case 3:
       return randomScripthash();
-    case 6:
+   case 6:
       return randomProgram();
   }
   throw new Error();
@@ -240,7 +241,7 @@ function randomContext() {
       return randomPubkeyhashContext();
     case 2:
       return randomScripthashContext();
-  }
+ }
   throw new Error();
 }
 
@@ -315,6 +316,7 @@ function fuzzVerify(flags) {
     const output = randomOutputScript();
 
     tx.inputs[0].script = input;
+
     tx.refresh();
 
     try {

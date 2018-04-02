@@ -33,7 +33,7 @@ function createGenesisBlock(options) {
         hash: consensus.NULL_HASH,
         index: 0xffffffff
       },
-      script: new Script()
+      script: Script()
         .pushInt(486604799)
         .pushPush(Buffer.from([4]))
         .pushData(flags)
@@ -83,19 +83,12 @@ const regtest = createGenesisBlock({
   nonce: 2
 });
 
-const btcd = createGenesisBlock({
-  version: 1,
-  time: 1401292357,
-  bits: 545259519,
-  nonce: 2
-});
 
 console.log(main);
 console.log('');
 console.log(testnet);
 console.log('');
 console.log(regtest);
-console.log('');
 console.log('');
 console.log('main hash: %s', main.rhash());
 console.log('main raw: %s', main.toRaw().toString('hex'));
@@ -106,6 +99,3 @@ console.log('');
 console.log('regtest hash: %s', regtest.rhash());
 console.log('regtest raw: %s', regtest.toRaw().toString('hex'));
 console.log('');
-onsole.log('');
-console.log('btcd simnet hash: %s', btcd.rhash());
-console.log('btcd simnet raw: %s', btcd.toRaw().toString('hex'));
