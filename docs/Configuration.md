@@ -1,24 +1,24 @@
-By default, the mainnet bcoin config file will reside in ~/.bcoin/bcoin.conf.
+By default, the mainnet bcash config file will reside in ~/.bcash/bcash.conf.
 
 All bcoin configuration options work in the config file, CLI arguments, and
 process environment (with a `BCOIN_` prefix).
 
 ## Datadir/Prefix
 
-Bcoin's datadir is determined by the `prefix` option.
+Bcash's datadir is determined by the `prefix` option.
 
 Example:
 
 ``` bash
-$ bcoin --prefix ~/.bcoin_spv --spv
+$ bcash --prefix ~/.bcash_spv --spv
 ```
 
-Will create a datadir of `~/.bcoin_spv`, containing a chain database, wallet database and log file.
+Will create a datadir of `~/.bcash_spv`, containing a chain database, wallet database and log file.
 
 ## Common Options
 
 - `config`: Points to a custom config file, not in the prefix directory.
-- `network`: Which network's chainparams to use for the node (main, testnet, regtest, or segnet4) (default: main).
+- `network`: Which network's chainparams to use for the node (main, testnet, regtest) (default: main).
 - `workers`: Whether to use a worker process pool for transaction verification (default: true).
 - `workers-size`: Number of worker processes to spawn for transaction verification. By default, the worker pool will be sized based on the number of CPUs/cores in the machine.
 - `workers-timeout`: Worker process execution timeout in milliseconds (default: 120000).
@@ -76,10 +76,10 @@ Note that certain chain options affect the format and indexing of the chain data
 
 ## Miner Options
 
-- `coinbase-flags`: Coinbase flags (default: mined by bcoin).
+- `coinbase-flags`: Coinbase flags (default: mined by bcoin-abc).
 - `coinbase-address`: List of payout addresses, randomly selected during block creation (comma-separated).
-- `max-block-weight`: Max block weight to mine (default: 4000000).
-- `reserved-block-weight`: Amount of space reserved for coinbase (default: 4000).
+- `max-block-size`: Max block size to mine (default: 2000000).
+- `reserved-block-size`: Amount of space reserved for coinbase (default: 1000).
 - `reserved-block-sigops`: Amount of sigops reserved for coinbase (default: 400).
 
 ## HTTP
@@ -92,7 +92,10 @@ Note that certain chain options affect the format and indexing of the chain data
 - `api-key`: API key (used for accessing all node APIs).
 - `wallet-auth`: Enable token auth for wallets (default: false).
 - `no-auth`: Disable auth for API server and wallets (default: false).
+- `cors`: Enable  Cross-Origin Resource sharing HTTP headers (default: false).
+
 
 ## Sample Config File
 
 See https://github.com/bcoin-org/bcoin/blob/master/etc/sample.conf.
+See https://github.com/bcash-org/bcoin-abc/blob/master/etc/wallet.conf.
