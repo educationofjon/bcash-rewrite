@@ -1,10 +1,10 @@
 'use strict';
 
-const bcoin = require('../..');
-const random = bcoin.crypto.random;
-const WalletDB = bcoin.walletdb;
-const MTX = bcoin.mtx;
-const Outpoint = bcoin.outpoint;
+const bcash = require('../..');
+const random = bcash.crypto.random;
+const WalletDB = bcash.walletdb;
+const MTX = bcash.mtx;
+const Outpoint = bcash.outpoint;
 
 function dummy() {
   const hash = random.randomBytes(32).toString('hex');

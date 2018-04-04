@@ -2,10 +2,10 @@
 
 // Usage: $ node ./docs/Examples/connect-to-peer.js [ip]:[port]
 
-const bcoin = require('../..');
-const Peer = bcoin.peer;
-const NetAddress = bcoin.netaddress;
-const Network = bcoin.network;
+const bcash = require('../..');
+const Peer = bcash.peer;
+const NetAddress = bcash.netaddress;
+const Network = bcash.network;
 const network = Network.get('testnet');
 
 const peer = Peer.fromOptions({

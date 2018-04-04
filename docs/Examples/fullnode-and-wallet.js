@@ -1,8 +1,8 @@
 'use strict';
-const bcoin = require('../..').set('main');
-const walletPlugin = bcoin.wallet.plugin;
+const bcash = require('../..').set('main');
+const walletPlugin = bcash.wallet.plugin;
 
-const node = bcoin.fullnode({
+const node = bcash.fullnode({
   checkpoints: true,
   // Primary wallet passphrase
   passsphrase: 'node',

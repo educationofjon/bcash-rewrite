@@ -1,10 +1,10 @@
 'use strict';
 
 const path = require('path');
-const bcoin = require('../..');
-const Chain = bcoin.chain;
-const Logger = bcoin.logger;
-const util = bcoin.util;
+const bcash = require('../..');
+const Chain = bcash.chain;
+const Logger = require('blgr');
+const util = bcash.util;
 
 const HOME = process.env.HOME;
 
