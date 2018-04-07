@@ -1,6 +1,6 @@
 {
   "name": "bcoin-abc",
-  "version": "1.0.0-pre",
+  "version": "1.0.0",
   "description": "Bitcoin-Cash bike-shed",
   "license": "MIT",
   "repository": {
