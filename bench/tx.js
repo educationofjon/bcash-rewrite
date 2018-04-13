@@ -59,11 +59,11 @@ const tx10 = common.readTX('tx10');
 
 {
   const [tx] = tx5.getTX();
-  const end = bench('witness hash');
+  const end = bench('hash');
 
   for (let i = 0; i < 30000; i++) {
-    tx.witnessHash();
-    tx._whash = null;
+    tx.hash();
+    tx._hash = null;
   }
 
   end(30000);
