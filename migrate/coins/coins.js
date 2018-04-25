@@ -9,12 +9,12 @@
 'use strict';
 
 const assert = require('assert');
+const {encoding} = require('bufio');
 const util = require('../../lib/utils/util');
 const Coin = require('../../lib/primitives/coin');
 const Output = require('../../lib/primitives/output');
-const BufferReader = require('../../lib/utils/reader');
-const StaticWriter = require('../../lib/utils/staticwriter');
-const encoding = require('../../lib/utils/encoding');
+const BufferReader = require('bufio').BufferReader;
+const StaticWriter = require('bufio').StaticWriter;
 const compressor = require('./compress');
 const compress = compressor.compress;
 const decompress = compressor.decompress;
