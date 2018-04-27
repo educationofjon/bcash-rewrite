@@ -10,40 +10,7 @@ const common = require('../test/util/common');
 const bench = require('./bench');
 
 const tx3 = common.readTX('tx3');
-const tx5 = common.readTX('tx5');
 const tx10 = common.readTX('tx10');
-
-{
-  const raw = tx5.getRaw();
-  const end = bench('parse');
-
-  for (let i = 0; i < 10000; i++)
-    TX.fromRaw(raw);
-
-  end(10000);
-}
-
-{
-  const [tx, view] = tx5.getTX();
-  const end = bench('sigops');
-
-  for (let i = 0; i < 100000; i++)
-    tx.getSigopsCount(view);
-
-  end(100000);
-}
-
-{
-  const [tx] = tx5.getTX();
-  const end = bench('serialize');
-
-  for (let i = 0; i < 10000; i++) {
-    tx._raw = null;
-    tx.toRaw();
-  }
-
-  end(10000);
-}
 
 {
   const [tx] = tx3.getTX();
@@ -55,58 +22,6 @@ const tx10 = common.readTX('tx10');
   }
 
   end(30000);
-}
-
-{
-  const [tx] = tx5.getTX();
-  const end = bench('hash');
-
-  for (let i = 0; i < 30000; i++) {
-    tx.hash();
-    tx._hash = null;
-  }
-
-  end(30000);
-}
-
-{
-  const [tx] = tx5.getTX();
-  const end = bench('sanity');
-
-  for (let i = 0; i < 10000; i++)
-    tx.isSane();
-
-  end(10000);
-}
-
-{
-  const [tx] = tx5.getTX();
-  const end = bench('input hashes');
-
-  for (let i = 0; i < 10000; i++)
-    tx.getInputHashes(null, 'hex');
-
-  end(10000);
-}
-
-{
-  const [tx] = tx5.getTX();
-  const end = bench('output hashes');
-
-  for (let i = 0; i < 10000; i++)
-    tx.getOutputHashes('hex');
-
-  end(10000);
-}
-
-{
-  const [tx] = tx5.getTX();
-  const end = bench('all hashes');
-
-  for (let i = 0; i < 10000; i++)
-    tx.getHashes(null, 'hex');
-
-  end(10000);
 }
 
 {
