@@ -5,10 +5,10 @@ const StaticWriter = require('bufio').StaticWriter;
 const common = require('../test/util/common');
 const bench = require('./bench');
 
-const tx5 = common.readTX('tx5');
+const tx3 = common.readTX('tx3');
 
 {
-  const [tx] = tx5.getTX();
+  const [tx] = tx3.getTX();
   const end = bench('serialize (static-writer)');
   for (let i = 0; i < 10000; i++) {
     tx.refresh();
@@ -21,7 +21,7 @@ const tx5 = common.readTX('tx5');
 }
 
 {
-  const [tx] = tx5.getTX();
+  const [tx] = tx3.getTX();
   const end = bench('serialize (buffer-writer)');
   for (let i = 0; i < 10000; i++) {
     tx.refresh();
