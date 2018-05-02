@@ -399,11 +399,15 @@ describe('Chain', function() {
   });
 
   it('should have activated UAHF', async () => {
-    const height = network.block.UAHFHeight;
-    const prev = await chain.getPrevious(chain.tip);
-    const state = await chain.getState(prev);
-    assert(chain.state.hasUAHF());
-  });
+    for (let i = 0; i < 10; i++) {
+      const block = await miner.mineBlock();
+      await chain.add(block);
+    }
+
+    const prev = chain.tip;
+    const state = await chain.state.hasUAHF(prev);
+    assert.strict(state);
+   });
 
   it('should test csv', async () => {
     const tx = (await chain.getBlock(chain.height - 100)).txs[0];
@@ -494,7 +498,7 @@ describe('Chain', function() {
   });
 
   it('should have correct wallet balance', async () => {
-    assert.strictEqual(wallet.balance, 1407499999705);
+    assert.strictEqual(wallet.balance, 1410624999705);
   });
 
   it('should fail to connect bad bits', async () => {
@@ -591,7 +595,7 @@ describe('Chain', function() {
       assert(await chain.add(block));
     }
 
-    assert.strictEqual(chain.height, 2620);
+    assert.strictEqual(chain.height, 2630);
   });
 
   it('should mine a tx', async () => {
@@ -775,7 +779,7 @@ describe('Chain', function() {
       assert(await chain.add(block, flags));
     }
 
-    assert.strictEqual(chain.height, 2731);
+    assert.strictEqual(chain.height, 2741);
   });
 
   it('should fail to connect too many sigops', async () => {
