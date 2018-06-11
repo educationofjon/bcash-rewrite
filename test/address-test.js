@@ -13,7 +13,7 @@ describe('Address', function() {
     const p2pkh = Buffer.from(raw, 'hex');
     const addr = Address.fromPubkeyhash(p2pkh);
     const expectedAddr = '1MirQ9bwyQcGVJPwKUgapu5ouK2E2Ey4gX';
-    assert.strictEqual(addr.toString('main'), expectedAddr);
+    assert.strictEqual(addr.toBase58('main'), expectedAddr);
   });
 
   it('should match mainnet p2pkh address 2', () => {
@@ -21,7 +21,7 @@ describe('Address', function() {
     const p2pkh = Buffer.from(raw, 'hex');
     const addr = Address.fromPubkeyhash(p2pkh);
     const expectedAddr = '12MzCDwodF9G1e7jfwLXfR164RNtx4BRVG';
-    assert.strictEqual(addr.toString('main'), expectedAddr);
+    assert.strictEqual(addr.toBase58('main'), expectedAddr);
   });
 
   it('should match testnet p2pkh address', () => {
@@ -29,7 +29,7 @@ describe('Address', function() {
     const p2pkh = Buffer.from(raw, 'hex');
     const addr = Address.fromPubkeyhash(p2pkh);
     const expectedAddr = 'mrX9vMRYLfVy1BnZbc5gZjuyaqH3ZW2ZHz';
-    assert.strictEqual(addr.toString('testnet'), expectedAddr);
+    assert.strictEqual(addr.toBase58('testnet'), expectedAddr);
   });
 
   it('should handle wrong p2pkh hash length', () => {
@@ -59,7 +59,7 @@ describe('Address', function() {
     const script = Script.fromRaw(p2sh);
     const addr = Address.fromScript(script);
     const expectedAddr = '3QJmV3qfvL9SuYo34YihAf3sRCW3qSinyC';
-    assert.strictEqual(addr.toString('main'), expectedAddr);
+    assert.strictEqual(addr.toBase58('main'), expectedAddr);
   });
 
   it('should match mainnet p2sh address obtained from script hash', () => {
@@ -67,7 +67,7 @@ describe('Address', function() {
     const p2sh = Buffer.from(raw, 'hex');
     const addr = Address.fromScripthash(p2sh);
     const expectedAddr = '3QJmV3qfvL9SuYo34YihAf3sRCW3qSinyC';
-    assert.strictEqual(addr.toString('main'), expectedAddr);
+    assert.strictEqual(addr.toBase58('main'), expectedAddr);
   });
 
   it('should match mainnet p2sh address obtained from script 2', () => {
@@ -75,7 +75,7 @@ describe('Address', function() {
     const p2sh = Buffer.from(raw, 'hex');
     const addr = Address.fromScripthash(p2sh);
     const expectedAddr = '3NukJ6fYZJ5Kk8bPjycAnruZkE5Q7UW7i8';
-    assert.strictEqual(addr.toString('main'), expectedAddr);
+    assert.strictEqual(addr.toBase58('main'), expectedAddr);
   });
 
   it('should match testnet p2sh address', () => {
@@ -83,6 +83,31 @@ describe('Address', function() {
     const p2sh = Buffer.from(raw, 'hex');
     const addr = Address.fromScripthash(p2sh);
     const expectedAddr = '2NBFNJTktNa7GZusGbDbGKRZTxdK9VVez3n';
-    assert.strictEqual(addr.toString('testnet'), expectedAddr);
+    assert.strictEqual(addr.toBase58('testnet'), expectedAddr);
   });
-});
+
+  it('should match mainnet p2pkh cashaddr', () => {
+    const raw = 'e34cce70c86373273efcc54ce7d2a491bb4a0e84';
+    const p2pkh = Buffer.from(raw, 'hex');
+    const addr = Address.fromPubkeyhash(p2pkh);
+    assert.strictEqual(addr.toString('main'),
+      'bitcoincash:qr35ennsep3hxfe7lnz5ee7j5jgmkjswssk2puzvgv');
+  });
+
+  it('should match mainnet p2pkh cashaddr (2nd)', () => {
+    const raw = '0ef030107fd26e0b6bf40512bca2ceb1dd80adaa';
+    const p2pkh = Buffer.from(raw, 'hex');
+    const addr = Address.fromScripthash(p2pkh);
+    assert.strictEqual(addr.toString('main'),
+    'bitcoincash:qq80qvqs0lfxuzmt7sz3909ze6camq9d4gxau4gyg4');
+  });
+
+  it('should match testnet p2pkh cashaddr', () => {
+    const raw = '78b316a08647d5b77283e512d3603f1f1c8de68f';
+    const p2pkh = Buffer.from(raw, 'hex');
+    const addr = Address.fromPubkeyhash(p2pkh);
+    const expectedAddr = 'mrX9vMRYLfVy1BnZbc5gZjuyaqH3ZW2ZHz';
+    assert.strictEqual(addr.toBase58('testnet'), expectedAddr);
+  });
+}):
+
