@@ -70,11 +70,11 @@ function dummyInput() {
   return Input.fromOutpoint(new Outpoint(hash, 0));
 }
 
-async function testP2PKH(witness, nesting) {
+async function testP2PKH() {
   const flags = Script.flags.STANDARD_VERIFY_FLAGS;
-  const receiveAddress = nesting ? 'nestedAddress' : 'receiveAddress';
-  const type = witness ? Address.types.WITNESS : Address.types.PUBKEYHASH;
-  const wallet = await wdb.create({ witness });
+  const receiveAddress = 'receiveAddress';
+  const type = Address.types.PUBKEYHASH;
+  const wallet = await wdb.create({});
 
   const waddr = await wallet.receiveAddress();
   const addr = Address.fromString(waddr.toString(wdb.network), wdb.network);
@@ -98,15 +98,14 @@ async function testP2PKH(witness, nesting) {
   assert(tx.verify(view, flags));
 }
 
-async function testP2SH(witness, nesting) {
+async function testP2SH() {
   const flags = Script.flags.STANDARD_VERIFY_FLAGS;
-  const receiveAddress = nesting ? 'nestedAddress' : 'receiveAddress';
-  const receiveDepth = nesting ? 'nestedDepth' : 'receiveDepth';
-  const vector = witness ? 'witness' : 'script';
+  const receiveAddress = 'receiveAddress';
+  const receiveDepth = 'receiveDepth';
+  const vector = 'script';
 
   // Create 3 2-of-3 wallets with our pubkeys as "shared keys"
   const options = {
-    witness,
     type: 'multisig',
     m: 2,
     n: 3
@@ -129,31 +128,17 @@ async function testP2SH(witness, nesting) {
   // Our p2sh address
   const addr1 = await alice[receiveAddress]();
 
-  if (witness) {
-    const type = nesting ? Address.types.SCRIPTHASH : Address.types.WITNESS;
-    assert.strictEqual(addr1.type, type);
-  } else {
-    assert.strictEqual(addr1.type, Address.types.SCRIPTHASH);
-  }
+  assert.strictEqual(addr1.type, Address.types.SCRIPTHASH);
 
   assert((await alice[receiveAddress]()).equals(addr1));
   assert((await bob[receiveAddress]()).equals(addr1));
   assert((await carol[receiveAddress]()).equals(addr1));
 
-  const nestedAddr1 = await alice.nestedAddress();
-
-  if (witness) {
-    assert(nestedAddr1);
-    assert((await alice.nestedAddress()).equals(nestedAddr1));
-    assert((await bob.nestedAddress()).equals(nestedAddr1));
-    assert((await carol.nestedAddress()).equals(nestedAddr1));
-  }
-
   {
     // Add a shared unspent transaction to our wallets
     const fund = new MTX();
     fund.addInput(dummyInput());
-    fund.addOutput(nesting ? nestedAddr1 : addr1, 5460 * 10);
+    fund.addOutput(addr1, 5460 * 10);
 
     // Simulate a confirmation
     assert.strictEqual(await alice[receiveDepth](), 1);
@@ -263,14 +248,6 @@ describe('Wallet', function() {
 
   it('should sign/verify p2pkh tx', async () => {
     await testP2PKH(false, false);
-  });
-
-  it('should sign/verify p2wpkh tx', async () => {
-    await testP2PKH(true, false);
-  });
-
-  it('should sign/verify p2wpkh tx w/ nested bullshit', async () => {
-    await testP2PKH(true, true);
   });
 
   it('should multisign/verify TX', async () => {
@@ -707,10 +684,7 @@ describe('Wallet', function() {
 
     assert.strictEqual(t2.getFee(v2), 5250);
 
-    assert.strictEqual(t2.getWeight(), 2084);
-    assert.strictEqual(t2.getBaseSize(), 521);
-    assert.strictEqual(t2.getSize(), 521);
-    assert.strictEqual(t2.getVirtualSize(), 521);
+    assert.strictEqual(t2.getSize(), 519);
 
     let balance = null;
     bob.once('balance', (b) => {
@@ -796,15 +770,6 @@ describe('Wallet', function() {
     await testP2SH(false, false);
   });
 
-  it('should verify 2-of-3 p2wsh tx', async () => {
-    await testP2SH(true, false);
-  });
-
-  it('should verify 2-of-3 p2wsh tx w/ nested bullshit', async () => {
-    await testP2SH(true, true);
-  });
-
-
   it('should create account', async () => {
     const wallet = await wdb.create();
     const account = await wallet.createAccount({
@@ -812,7 +777,7 @@ describe('Wallet', function() {
     });
 
     assert(account);
-    assert(account.initialzed);
+    assert(account.initialized);
     assert.strictEqual(account.name, 'foo');
     assert.strictEqual(account.accountIndex, 1);
     assert.strictEqual(account.m, 1);
@@ -820,21 +785,21 @@ describe('Wallet', function() {
   });
 
   it('should fail to create duplicate account', async () => {
-+    const wallet = await wdb.create();
-+    const name = 'foo';
-+
-+    await wallet.createAccount({ name });
-+
-+    let err;
-+    try {
-+      await wallet.createAccount({ name });
-+    } catch (e) {
-+      err = e;
-+    }
-+
-+    assert(err);
-+    assert.strictEqual(err.message, 'Account already exists.');
-+  });
+    const wallet = await wdb.create();
+    const name = 'foo';
+
+    await wallet.createAccount({ name });
+
+    let err;
+    try {
+      await wallet.createAccount({ name });
+    } catch (e) {
+      err = e;
+    }
+
+    assert(err);
+    assert.strictEqual(err.message, 'Account already exists.');
+  });
 
   it('should fill tx with account 1', async () => {
     const alice = await wdb.create();
@@ -1457,6 +1422,7 @@ describe('Wallet', function() {
     await wdb.addBlock(nextBlock(wdb), [t3.toTX()]);
 
     assert.strictEqual((await bob.getBalance()).unconfirmed, 30000);
+    await wdb.close();
   });
 
   it('should recover from a missed tx and double spend', async () => {
@@ -1528,6 +1494,7 @@ describe('Wallet', function() {
     await wdb.addBlock(nextBlock(wdb), [t3.toTX()]);
 
     assert.strictEqual((await bob.getBalance()).unconfirmed, 30000);
+    await wdb.close();
   });
 
   it('should remove a wallet', async () => {
@@ -1539,7 +1506,8 @@ describe('Wallet', function() {
     assert(!await wdb.get('alice100'));
   });
 
-  it('should cleanup', () => {
+  it('should cleanup', async () => {
     consensus.COINBASE_MATURITY = 100;
+    await wdb.close();
   });
 });
