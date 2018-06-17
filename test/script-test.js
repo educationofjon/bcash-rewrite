@@ -24,7 +24,14 @@ function isSuccess(stack) {
 }
 
 function parseScriptTest(data) {
-  const witArr = Array.isArray(data[0]) ? data.shift() : [];
+  let value = 0;
+
+  if (Array.isArray(data[0])) {
+    assert(data[0].length === 1, 'Incorrect script-tests.json');
+    value = fromFloat(data[0][0], 8);
+    data = data.slice(1);
+  }
+
   const inpHex = data[0];
   const outHex = data[1];
   const names = data[2] || 'NONE';
@@ -35,10 +42,6 @@ function parseScriptTest(data) {
     comments = outHex.slice(0, 60);
 
   comments += ` (${expected})`;
-
-  let value = 0;
-  if (witArr.length > 0)
-    value = fromFloat(witArr.pop(), 8);
 
   const input = Script.fromString(inpHex);
   const output = Script.fromString(outHex);
@@ -324,7 +327,7 @@ describe('Script', function() {
 
         let err;
         try {
-          Script.verify(input, output, tx, 0, value, flags);
+          Script.verify(input, null, output, tx, 0, value, flags);
         } catch (e) {
           err = e;
         }
