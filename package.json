@@ -9,7 +9,7 @@
   },
   "homepage": "https://github.com/master-org/bcoin-abc",
   "bugs": {
-    "url": "https://github.com/bcash-org/bcoin-abc/issues"
+    "url": "https://github.com/master-org/bcoin-abc/issues"
   },
   "author": "Fedor Indutny <fedor@indutny.com>",
   "contributors": [
@@ -45,7 +45,7 @@
     "bsip": "~0.1.0",
     "bsock": "~0.1.0",
     "bsocks": "~0.2.0",
-    "bcstring": "~0.0.2",
+    "bcstring": "bcoin-org/bcstring#bstring",
     "btcp": "~0.1.0",
     "bufio": "~0.2.0",
     "bupnp": "~0.2.1",
